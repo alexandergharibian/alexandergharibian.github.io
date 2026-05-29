@@ -24,20 +24,37 @@ export interface HeroProps {
   email: string;
 }
 
+export interface ExperienceLink {
+  text: string;
+  href: string;
+}
+
+export type ExperienceSummaryPart = string | ExperienceLink;
+
+export type ExperienceBullet = string | ExperienceSummaryPart[];
+
 export interface ExperienceProps {
   company: string;
   position: string;
   startDate: string;
   endDate: string;
-  summary: string | string[];
+  summary: ExperienceBullet[];
+}
+
+export interface ProjectVideoProps {
+  mp4: string;
+  webm?: string;
 }
 
 export interface ProjectProps {
   name: string;
   summary: string;
   image: string;
+  video?: ProjectVideoProps;
   linkPreview?: string;
+  linkPreviewLabel?: string;
   linkSource?: string;
+  linkSourceLabel?: string;
 }
 
 export interface AboutProps {
@@ -51,10 +68,10 @@ export interface HeaderProps {
 }
 
 export const SITE_CONFIG: SiteConfig = {
-  title: "Alexander Gharibian — Software Engineer",
+  title: "Alexander Gharibian — Senior Software Engineer",
   author: "Alexander Gharibian",
   description:
-    "Software Engineer based in Boston, MA. Specialized in backend development, cloud infrastructure, and full-stack applications. Currently working at Capital One leading teams to build innovative financial services solutions.",
+    "Senior Software Engineer in Boston, MA. Building agentic recommendations and homepage personalization at Spotify. Backend systems, ML ranking, and cloud infrastructure at scale.",
   lang: "en",
   siteLogo: "/alex-small.jpeg",
   navLinks: [
@@ -73,30 +90,66 @@ export const SITE_CONFIG: SiteConfig = {
 export const SITE_CONTENT: SiteContent = {
   hero: {
     name: "Alexander Gharibian",
-    specialty: "Software Engineer",
+    specialty: "Senior Software Engineer",
     summary:
-      "Software Engineer based in Boston, MA. Passionate about building innovative software solutions, leading teams, and creating exceptional user experiences. Specialized in backend development, cloud infrastructure, and full-stack applications.",
+      "Senior Software Engineer based in Boston, MA. At Spotify, I build agentic recommendation systems and large-scale homepage personalization—shipping features used by hundreds of millions of listeners, from LLM-powered experiences to high-throughput ranking backends on GCP.",
     email: "alexandergharibian@gmail.com",
   },
   experience: [
     {
       company: "Spotify",
-      position: "Senior Software Engineer",
-      startDate: "May 2022",
+      position: "Senior Engineer, Agentic Recommendations",
+      startDate: "February 2025",
       endDate: "Present",
       summary: [
-        "Worked on a team building recommendation systems for Spotify's Home Page"
+        [
+          "Architected the foundation for how agentic recommendations work across Spotify, letting users reshape their homepage in real-time through natural-language prompts; launched as ",
+          {
+            text: "Taste Profile",
+            href: "https://newsroom.spotify.com/2026-03-13/taste-profile-beta-announcement/",
+          },
+          " (announced by the Co-CEO at SXSW)",
+        ],
+        "Led strategy, prototyping, and productionization across 30-to-1 agentic workstreams, validated through 5 live user experiments",
+        "Built and shipped an agentic homepage carousel that turns a user's natural-language prompt into personalized recommendations, using an LLM to classify intent and orchestrate concurrent calls to Spotify search and recommendation tools; results stream at 3x the baseline rate, powered by Gemini, Braintrust, LangChain, gRPC, and Pub/Sub",
+      ],
+    },
+    {
+      company: "Spotify",
+      position: "Senior Engineer, Homepage Personalization",
+      startDate: "February 2024",
+      endDate: "February 2025",
+      summary: [
+        [
+          "Drove rollout of Spotify's ",
+          {
+            text: "redesigned feed-based homepage",
+            href: "https://newsroom.spotify.com/2023-03-08/new-home-page-scroll-clips-previews/",
+          },
+          " as engineering point of contact for Home Personalization, coordinating cross-org A/B tests and go-to-market strategy to launch to 500M+ MAUs",
+        ],
+        "Designed and shipped a next-gen gRPC-based homepage ranker backend that cut infrastructure costs by 80%+ on Spotify's second-costliest GKE namespace while scoring and ranking hundreds of candidates per user at sub-250ms p99 latency, saving $1M+/year",
+        "Lifted below-the-fold consumption 3% and podcast discovery 9% with a new ML ranking model, driving tens of millions of incremental streams at Spotify's scale",
+      ],
+    },
+    {
+      company: "Spotify",
+      position: "Engineer II, Homepage Personalization",
+      startDate: "May 2022",
+      endDate: "February 2024",
+      summary: [
+        "Authored two cross-org RFCs defining implementation strategies to unify Spotify's homepage ranking across mobile and non-mobile platforms, driving adoption discussions with leadership across Home and partner product orgs",
       ],
     },
     {
       company: "Capital One",
       position: "Senior Associate Software Engineer",
       startDate: "July 2020",
-      endDate: "April 2022",
+      endDate: "May 2022",
       summary: [
-        "Led a team of 3 to implement Secured Card specific functionality in the website used by Capital One's call center agents, such as the ability to check the balance of and pay the security deposit on the account",
-        "Developed RESTful Golang orchestration AWS Lambda APIs to enable millions of Capital One's Secured Card customers to increase their credit limit after their account has been established",
-        "Created an automated end-to-end testing framework to create pre-conditioned Secured Card testing accounts to use with internal systems and to allow for integration within CI/CD pipelines to test overall system functionality before deployment, reducing the time to create test data from 15 minutes to 30 seconds",
+        "Led a team of 3 to ship Secured Card balance-check and security-deposit-payment flows in Capital One's call-center agent website",
+        "Built Go-based AWS Lambda orchestration APIs powering credit-limit increases for millions of Secured Card customers",
+        "Cut Secured Card test-data setup from 15 minutes to 30 seconds by building an automated end-to-end framework that provisions pre-conditioned accounts and integrates with CI/CD pipelines",
       ],
     },
     {
@@ -105,45 +158,58 @@ export const SITE_CONTENT: SiteContent = {
       startDate: "August 2019",
       endDate: "July 2020",
       summary: [
-        "Wrote part of the core logic for an AWS Lambda, AWS EMR, and Apache Spark-based decision engine that modifies a business card customer's APR based on payment habits replacing a legacy, on-premise system saving the company $10M annually",
-        "Implemented a Java Spring Boot API and Vue.js-based UI tile used by call center agents to see information regarding a customer's remaining statement balance, allowing agents to provide another option for customers to pay their bill",
+        "Saved $10M/year by co-developing the core logic of an AWS Lambda, EMR, and Spark-powered decision engine that adjusts business credit card APRs from payment behavior, replacing a legacy on-prem system",
+        "Shipped a Java Spring Boot API and Vue.js-based call-center tile surfacing remaining statement balance, unlocking a new bill-payment path for customers",
       ],
     },
     {
       company: "Red Hat",
       position: "Performance Engineering Intern",
-      startDate: "May 2018",
-      endDate: "August 2018",
+      startDate: "Summer 2018",
+      endDate: "",
       summary: [
-        "Wrote unit tests for Machine Learning Container Creator (MLCC), a command line utility that installs a user's desired machine learning packages in a Docker container for Red Hat operating systems in a single command hiding the messy details and eliminating the risk of corrupting the host operating system",
-        "Created an ML app using OpenCV and TensorFlow that identifies handwritten digits via camera to demonstrate the MLCC workflow and presented in front of Red Hat employees and executives",
+        "Built an OpenCV + TensorFlow handwritten-digit demo for Machine Learning Container Creator (MLCC), a one-command CLI for installing ML packages into Docker containers on Red Hat OSes; presented to Red Hat employees and executives",
       ],
     },
     {
       company: "Red Hat",
       position: "Software Engineering Intern",
-      startDate: "June 2017",
-      endDate: "August 2017",
-      summary:
-        "Worked on the team developing Linchpin, an application that provides a command-line interface and Python API for provisioning and managing resources across multiple infrastructures. I developed the Linchpin fetch feature to retrieve remote topology configurations and integrate them locally to allow users to quickly restore previously working sessions. Linchpin has been downloaded over 225k times.",
+      startDate: "Summer 2017",
+      endDate: "",
+      summary: [
+        [
+          "Built the fetch feature for ",
+          {
+            text: "Linchpin",
+            href: "https://github.com/CentOS-PaaS-SIG/linchpin",
+          },
+          " (open-source multi-cloud provisioning CLI/Python API, 225k+ downloads), enabling users to pull remote topology configurations locally and restore prior sessions",
+        ],
+      ],
     },
   ],
   projects: [
     {
-      name: "BandMap",
-      summary: "A unified service that allows users to find trustworthy bands and local musicians for hire. Musicians and bands can create their own profile, showcasing their talent so that venues can quickly learn about each artist's capabilities and contact them for hire through the website.",
-      linkPreview: "/",
-      linkSource: "https://github.com/alexandergharibian",
-      image: "/spotifu.png",
+      name: "Spotify Taste Profile",
+      summary:
+        "Spotify's next step in transparent personalization—listeners review and shape how their taste drives the homepage across music, podcasts, and audiobooks. Announced at SXSW in March 2026; I architected the agentic foundation that lets users reshape their homepage through natural-language prompts.",
+      linkPreview:
+        "https://newsroom.spotify.com/2026-03-13/taste-profile-beta-announcement/",
+      linkPreviewLabel: "Announcement",
+      image: "/taste-profile-poster.jpg",
+      video: {
+        mp4: "/taste-profile.mp4",
+        webm: "/taste-profile.webm",
+      },
     },
   ],
   about: {
     description: `
-      Hi, I'm Alexander Gharibian, a Software Engineer based in Boston, MA. I'm passionate about building innovative software solutions and leading teams to deliver exceptional results.
+      Hi, I'm Alexander Gharibian, a Senior Software Engineer based in Boston, MA.
 
-      I currently work at Capital One as a Senior Associate Software Engineer, where I lead a team developing critical financial services applications. My expertise spans backend development with Go and Java, cloud infrastructure on AWS, and full-stack development with Vue.js. I'm also an AWS Certified Solutions Architect Associate.
+      I work at Spotify on agentic recommendations and homepage personalization. Recently I've helped launch Taste Profile and agentic homepage experiences, driven Spotify's redesigned feed-based homepage to 500M+ MAUs, and built ranking infrastructure that cuts cost while improving discovery at scale. Before Spotify, I led backend teams at Capital One shipping financial products used by millions of customers.
 
-      When I'm not coding, I enjoy playing guitar and piano, skiing, rowing, and cycling. I'm fluent in both English and Armenian, and I hold a Bachelor of Science in Computer Science from Purdue University with a concentration in Systems Programming and Software Engineering, along with a Certificate in Entrepreneurship.
+      I'm an AWS Certified Solutions Architect Associate with a background in backend systems (Go, Java, Python), cloud infrastructure, and ML-powered products. When I'm not coding, I enjoy guitar and piano, skiing, rowing, and cycling. I'm fluent in English and Armenian, and I hold a B.S. in Computer Science from Purdue University with a concentration in Systems Programming and Software Engineering and a Certificate in Entrepreneurship.
     `,
     image: "/alex-big.jpeg",
   },
